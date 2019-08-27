@@ -1,0 +1,97 @@
+// Copy one of these methods to the ValidateTest file to auto generate some test methods for all supported countries.
+// This file is only in the repository for future reference and has no actual function for production code.
+// This is why it is a txt file instead of a php file.
+
+public function testGenerateTestsForLiveEndpoint() {
+    $codes = $this->countries->codes();
+
+    `echo "" > ~/Desktop/eu-vat-testmethods-live.txt`;
+
+    foreach ($codes as $code) {
+        if ($code === 'ZZZZ') {
+            // Test code
+            continue;
+        }
+
+        $instance = $this->countries->getInstance($code);
+
+        $allowedCharacterArrays = $instance->getAllowedCharacters();
+
+        $vats = [];
+
+        if (!is_array(reset($allowedCharacterArrays))) {
+            $allowedCharacterArrays = [$allowedCharacterArrays];
+        }
+
+        foreach ($allowedCharacterArrays as $allowedCharacterArray) {
+            $tempCharacterStrings = [''];
+
+            $allowedCharacterArray = array_map(function($point) {
+                return preg_replace('/.-(.)/', '$1', $point);
+            }, $allowedCharacterArray);
+
+            foreach ($allowedCharacterArray as $characters) {
+                $tempVats = [];
+
+                foreach (str_split($characters) as $char) {
+                    $tempVats[] = array_map(function($item) use ($char) {
+                        return $item . $char;
+                    }, $tempCharacterStrings);
+                }
+
+                $tempCharacterStrings = Arr::flatten($tempVats);
+            }
+
+            $vats = array_merge($vats, $tempCharacterStrings);
+        }
+
+        $stub = <<<HEREDOC
+
+    public function testSupported{$code}() {
+        \\\$countryCode = '{$code}';
+
+        \\\$this->assertTrue(\\\$this->countries->supports(\\\$countryCode), 'Country code ' . \\\$countryCode . ' should be supported specifically for testing.');
+
+HEREDOC;
+
+        foreach ($vats as $vat) {
+            $stub .= <<<HEREDOC
+
+        \\\$this->assertValidateVatNumber(false, '{$code}{$vat}', \\\$countryCode);
+HEREDOC;
+
+
+        }
+
+        $stub .= <<<HEREDOC
+
+    }
+HEREDOC;
+
+        `echo "$stub" >> ~/Desktop/eu-vat-testmethods-live.txt`;
+      }
+}
+
+public function testGenerateTestsForTestEndpoint() {
+    $codes = $this->countries->codes();
+
+    `echo "" > ~/Desktop/eu-vat-testmethods-test.txt`;
+
+    foreach ($codes as $code) {
+        if ($code === 'ZZZZ') {
+            // Test code
+            continue;
+        }
+
+        $stub  = <<<HEREDOC
+
+    public function test{$code}() {
+        \\\$countryCode = '{$code}';
+
+        \\\$this->assertValidateAllTestVatNumbers(\\\$countryCode);
+    }
+HEREDOC;
+
+        `echo "$stub" >> ~/Desktop/eu-vat-testmethods-test.txt`;
+    }
+}
