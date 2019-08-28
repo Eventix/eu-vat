@@ -1,7 +1,7 @@
 # EU Vat
 
 [![PHP Version](https://img.shields.io/packagist/php-v/eventix/eu-vat)](https://php.net/)
-[Laravel Badge TODO](https://laravel.com/docs/5.7)
+[![Laravel Version](https://img.shields.io/badge/Laravel-%5E5.7-red)](https://laravel.com/docs/5.7)
 [![License](https://img.shields.io/github/license/eventix/eu-vat)](LICENSE)
 
 This Laravel package enables the formatting and validation of (EU) VAT numbers.
