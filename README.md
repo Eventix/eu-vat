@@ -6,7 +6,7 @@
 
 This Laravel package enables the formatting and validation of (EU) VAT numbers.
 
-For validation it uses the endpoints of the European Commission's VAT Information Exchange Service (VIES)
+For validation it uses the endpoints of the [European Commission's VAT Information Exchange Service (VIES)](http://ec.europa.eu/taxation_customs/vies/faq.html)
 
 ## Table of Contents
 
