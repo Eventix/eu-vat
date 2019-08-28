@@ -125,7 +125,7 @@ Note, for testing the project needs to be cloned and all dependencies installed 
 
 ``` bash
 $ cd /packages/directory
-$ git clone TODO
+$ git clone git@github.com:Eventix/eu-vat.git
 $ composer install
 ```
 
